@@ -26,6 +26,7 @@ document.addEventListener('mouseup', function(event) {
   console.log(selectedText);  // Displaying the selected text in the console
 
   if (selectedText.length > 0) {
+    console.log(`Length of selected text: ${selectedText.length}`);
     const range = window.getSelection().getRangeAt(0);
     const rect = range.getBoundingClientRect();
     showPopup(rect, selectedText);
