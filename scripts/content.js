@@ -1,5 +1,6 @@
 let popup = null;
 let selectedText = '';
+let extensionEnabled = false;
 
 // Function to show the popup
 function showPopup(rect, text) {
@@ -21,22 +22,46 @@ function hidePopup() {
   }
 }
 
-document.addEventListener('mouseup', function(event) {
-  selectedText = window.getSelection().toString().trim();
-  console.log(selectedText);  // Displaying the selected text in the console
 
-  if (selectedText.length > 0) {
-    console.log(`Length of selected text: ${selectedText.length}`);
-    const range = window.getSelection().getRangeAt(0);
-    const rect = range.getBoundingClientRect();
-    showPopup(rect, selectedText);
-
-    // Remove the popup when mouse is down (to allow new text selection)
-    document.addEventListener('mousedown', function onMouseDown() {
-      hidePopup();
-      selectedText = '';  // Clear the selected text
-    }, { once: true });
+function updateExtensionFeatures() {
+  if (extensionEnabled) {
+    console.log("extension enabled")
+    document.addEventListener('mouseup', function(event) {
+      selectedText = window.getSelection().toString().trim();
+      console.log(selectedText);  // Displaying the selected text in the console
+    
+      if (selectedText.length > 0) {
+        console.log(`Length of selected text: ${selectedText.length}`);
+        const range = window.getSelection().getRangeAt(0);
+        const rect = range.getBoundingClientRect();
+        showPopup(rect, selectedText);
+    
+        // Remove the popup when mouse is down (to allow new text selection)
+        document.addEventListener('mousedown', function onMouseDown() {
+          hidePopup();
+          selectedText = '';  // Clear the selected text
+        }, { once: true });
+      } else {
+        hidePopup();
+      }
+    });
   } else {
-    hidePopup();
+    console.log("extension disbaled")
+    // do nothing
   }
+}
+
+// Listen for state changes from the popup
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  extensionEnabled = request.extensionEnabled;
+  updateExtensionFeatures();
 });
+
+// Load the initial state from storage
+chrome.storage.sync.get('extensionEnabled', function(data) {
+  extensionEnabled = data.extensionEnabled;
+  updateExtensionFeatures();
+});
+
+
+
