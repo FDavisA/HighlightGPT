@@ -11,7 +11,7 @@ function showPopup(rect, text) {
   }
   popup.textContent = text;
   popup.style.left = `${rect.left}px`;
-  popup.style.top = `${rect.bottom}px`;  // Positioning it below the selected text
+  popup.style.top = `${rect.bottom}px`;
   popup.style.display = 'block';
 }
 
@@ -22,46 +22,34 @@ function hidePopup() {
   }
 }
 
-
-function updateExtensionFeatures() {
+// Always listen for mouseup events, but only act on them if the extension is enabled
+document.addEventListener('mouseup', function(event) {
   if (extensionEnabled) {
     console.log("extension enabled")
-    document.addEventListener('mouseup', function(event) {
-      selectedText = window.getSelection().toString().trim();
-      console.log(selectedText);  // Displaying the selected text in the console
-    
-      if (selectedText.length > 0) {
-        console.log(`Length of selected text: ${selectedText.length}`);
-        const range = window.getSelection().getRangeAt(0);
-        const rect = range.getBoundingClientRect();
-        showPopup(rect, selectedText);
-    
-        // Remove the popup when mouse is down (to allow new text selection)
-        document.addEventListener('mousedown', function onMouseDown() {
-          hidePopup();
-          selectedText = '';  // Clear the selected text
-        }, { once: true });
-      } else {
+    selectedText = window.getSelection().toString().trim();
+    console.log(`Length of selected text: ${selectedText.length}`);
+
+    if (selectedText.length > 0) {
+      const range = window.getSelection().getRangeAt(0);
+      const rect = range.getBoundingClientRect();
+      showPopup(rect, selectedText);
+
+      document.addEventListener('mousedown', function onMouseDown() {
         hidePopup();
-      }
-    });
-  } else {
-    console.log("extension disbaled")
-    // do nothing
+        selectedText = '';
+      }, { once: true });
+    } else {
+      hidePopup();
+    }
   }
-}
+});
 
 // Listen for state changes from the popup
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   extensionEnabled = request.extensionEnabled;
-  updateExtensionFeatures();
 });
 
 // Load the initial state from storage
 chrome.storage.sync.get('extensionEnabled', function(data) {
   extensionEnabled = data.extensionEnabled;
-  updateExtensionFeatures();
 });
-
-
-
