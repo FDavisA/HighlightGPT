@@ -2,15 +2,15 @@ let popup = null;
 let selectedText = '';
 
 // Function to show the popup
-function showPopup(event, text) {
+function showPopup(rect, text) {
   if (!popup) {
     popup = document.createElement('div');
     popup.className = 'highlight-popup';
     document.body.appendChild(popup);
   }
   popup.textContent = text;
-  popup.style.left = `${event.clientX}px`;
-  popup.style.top = `${event.clientY}px`;
+  popup.style.left = `${rect.left}px`;
+  popup.style.top = `${rect.bottom}px`;  // Positioning it below the selected text
   popup.style.display = 'block';
 }
 
@@ -21,29 +21,21 @@ function hidePopup() {
   }
 }
 
-// onMouseOver function
-function onMouseOver(e) {
-  const range = window.getSelection().getRangeAt(0);
-  const rect = range.getBoundingClientRect();
-  if (selectedText.length > 0 && e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
-    showPopup(e, selectedText);
-  } else {
-    hidePopup();
-  }
-}
-
 document.addEventListener('mouseup', function(event) {
   selectedText = window.getSelection().toString().trim();
+  console.log(selectedText);  // Displaying the selected text in the console
 
   if (selectedText.length > 0) {
-    // Attach mouseover event to the document
-    document.addEventListener('mouseover', onMouseOver);
+    const range = window.getSelection().getRangeAt(0);
+    const rect = range.getBoundingClientRect();
+    showPopup(rect, selectedText);
 
-    // Remove the event listeners when mouse is down (to allow new text selection)
+    // Remove the popup when mouse is down (to allow new text selection)
     document.addEventListener('mousedown', function onMouseDown() {
-      document.removeEventListener('mouseover', onMouseOver);
       hidePopup();
       selectedText = '';  // Clear the selected text
     }, { once: true });
+  } else {
+    hidePopup();
   }
 });
