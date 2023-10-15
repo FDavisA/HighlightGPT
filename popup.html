@@ -7,12 +7,13 @@
 </head>
 <body>
   <div id="mainPage">
-    <button id="settingsButton">Settings</button>
-    <div class="center">
+    <div class="header">
+      <div></div> <!-- Empty div for alignment -->
       <label class="switch">
         <input type="checkbox" id="toggleButton">
         <span class="slider"></span>
       </label>
+      <span id="settingsButton" class="cog">&#9881;</span> <!-- Unicode cog -->
     </div>
     <div class="options">
       <div class="option">
@@ -30,7 +31,10 @@
     </div>
   </div>
   <div id="settingsPage" class="hidden">
-    <button id="backButton">Back</button>
+    <div class="header">
+      <span id="backButton" class="back">&#8592;</span> <!-- Unicode left arrow -->
+      <div></div> <!-- Empty div for alignment -->
+    </div>
     <div>
       <label for="googleKey">Google Search API Key:</label>
       <input type="text" id="googleKey">

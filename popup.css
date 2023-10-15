@@ -68,3 +68,14 @@ input:checked + .slider:before {
 .hidden {
   display: none;
 }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cog, .back {
+  cursor: pointer;
+  font-size: 24px;
+}
