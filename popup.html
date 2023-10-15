@@ -3,6 +3,7 @@
 <head>
   <title>Toggle Extension</title>
   <link rel="stylesheet" type="text/css" href="popup.css">
+  <script src="utils.js"></script> <!-- Include utils.js here -->
   <script src="popup.js"></script>
 </head>
 <body>
@@ -41,6 +42,7 @@
         <input type="text" id="googleKey">
         <button id="saveGoogleKey" class="save-button">&#10003;</button> <!-- Unicode checkmark -->
       </div>
+      <span id="googleKeySaved" class="key-saved hidden">Key Saved!</span> <!-- New element -->
     </div>
     <div class="input-group">
       <label for="gptKey">GPT API Key:</label>

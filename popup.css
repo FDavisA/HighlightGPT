@@ -102,3 +102,9 @@ input:checked + .slider:before {
   font-size: 13px;
   margin-left: 10px;
 }
+
+.key-saved {
+  color: red;
+  font-size: small;
+  margin-top: 5px;
+}
