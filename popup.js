@@ -64,14 +64,22 @@ document.addEventListener('DOMContentLoaded', function() {
     settingsPage.classList.add('hidden');
   });
 
-  // Save API keys
-  googleKeyInput.addEventListener('input', function() {
-    chrome.storage.sync.set({ 'googleKey': this.value });
-    googleRadio.disabled = !this.value;
+  const saveGoogleKeyButton = document.getElementById('saveGoogleKey');
+  const saveGptKeyButton = document.getElementById('saveGptKey');
+
+  // Save Google API key when the checkmark button is clicked
+  saveGoogleKeyButton.addEventListener('click', function() {
+    const googleKey = googleKeyInput.value;
+    chrome.storage.sync.set({ 'googleKey': googleKey }, function() {
+      googleRadio.disabled = !googleKey;
+    });
   });
 
-  gptKeyInput.addEventListener('input', function() {
-    chrome.storage.sync.set({ 'gptKey': this.value });
-    gptRadio.disabled = !this.value;
+  // Save GPT API key when the checkmark button is clicked
+  saveGptKeyButton.addEventListener('click', function() {
+    const gptKey = gptKeyInput.value;
+    chrome.storage.sync.set({ 'gptKey': gptKey }, function() {
+      gptRadio.disabled = !gptKey;
+    });
   });
 });

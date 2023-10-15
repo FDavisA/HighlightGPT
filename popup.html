@@ -35,14 +35,19 @@
       <span id="backButton" class="back">&#8592;</span> <!-- Unicode left arrow -->
       <div></div> <!-- Empty div for alignment -->
     </div>
-    <div>
+    <div class="input-group">
       <label for="googleKey">Google Search API Key:</label>
-      <input type="text" id="googleKey">
+      <div class="input-with-button">
+        <input type="text" id="googleKey">
+        <button id="saveGoogleKey" class="save-button">&#10003;</button> <!-- Unicode checkmark -->
+      </div>
     </div>
-    <div>
+    <div class="input-group">
       <label for="gptKey">GPT API Key:</label>
-      <input type="text" id="gptKey">
+      <div class="input-with-button">
+        <input type="text" id="gptKey">
+        <button id="saveGptKey" class="save-button">&#10003;</button> <!-- Unicode checkmark -->
+      </div>
     </div>
-  </div>
 </body>
 </html>
