@@ -34,4 +34,44 @@ document.addEventListener('DOMContentLoaded', function() {
       chrome.storage.sync.set({ 'sourceChoice': this.value });
     });
   });
+
+  const mainPage = document.getElementById('mainPage');
+  const settingsPage = document.getElementById('settingsPage');
+  const settingsButton = document.getElementById('settingsButton');
+  const backButton = document.getElementById('backButton');
+  const googleKeyInput = document.getElementById('googleKey');
+  const gptKeyInput = document.getElementById('gptKey');
+  const googleRadio = document.getElementById('google');
+  const gptRadio = document.getElementById('gpt');
+
+  // Load API keys from storage
+  chrome.storage.sync.get(['googleKey', 'gptKey'], function(data) {
+    googleKeyInput.value = data.googleKey || '';
+    gptKeyInput.value = data.gptKey || '';
+    googleRadio.disabled = !data.googleKey;
+    gptRadio.disabled = !data.gptKey;
+  });
+
+  // Navigate to settings page
+  settingsButton.addEventListener('click', function() {
+    mainPage.classList.add('hidden');
+    settingsPage.classList.remove('hidden');
+  });
+
+  // Navigate back to main page
+  backButton.addEventListener('click', function() {
+    mainPage.classList.remove('hidden');
+    settingsPage.classList.add('hidden');
+  });
+
+  // Save API keys
+  googleKeyInput.addEventListener('input', function() {
+    chrome.storage.sync.set({ 'googleKey': this.value });
+    googleRadio.disabled = !this.value;
+  });
+
+  gptKeyInput.addEventListener('input', function() {
+    chrome.storage.sync.set({ 'gptKey': this.value });
+    gptRadio.disabled = !this.value;
+  });
 });

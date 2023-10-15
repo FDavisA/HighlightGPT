@@ -6,24 +6,38 @@
   <script src="popup.js"></script>
 </head>
 <body>
-  <div class="center">
-    <label class="switch">
-      <input type="checkbox" id="toggleButton">
-      <span class="slider"></span>
-    </label>
+  <div id="mainPage">
+    <button id="settingsButton">Settings</button>
+    <div class="center">
+      <label class="switch">
+        <input type="checkbox" id="toggleButton">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="options">
+      <div class="option">
+        <input type="radio" id="google" name="source" value="google">
+        <label for="google">Google</label>
+      </div>
+      <div class="option">
+        <input type="radio" id="gpt" name="source" value="gpt">
+        <label for="gpt">GPT</label>
+      </div>
+      <div class="option">
+        <input type="radio" id="text" name="source" value="text">
+        <label for="text">Selected Text</label>
+      </div>
+    </div>
   </div>
-  <div class="options">
-    <div class="option">
-      <input type="radio" id="google" name="source" value="google">
-      <label for="google">Google</label>
+  <div id="settingsPage" class="hidden">
+    <button id="backButton">Back</button>
+    <div>
+      <label for="googleKey">Google Search API Key:</label>
+      <input type="text" id="googleKey">
     </div>
-    <div class="option">
-      <input type="radio" id="gpt" name="source" value="gpt">
-      <label for="gpt">GPT</label>
-    </div>
-    <div class="option">
-      <input type="radio" id="text" name="source" value="text">
-      <label for="text">Selected Text</label>
+    <div>
+      <label for="gptKey">GPT API Key:</label>
+      <input type="text" id="gptKey">
     </div>
   </div>
 </body>
