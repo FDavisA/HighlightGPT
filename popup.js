@@ -16,4 +16,22 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+  // Get radio buttons
+  const radios = document.getElementsByName('source');
+
+  // Load the current choice from storage
+  chrome.storage.sync.get('sourceChoice', function(data) {
+    const choice = data.sourceChoice || 'text';  // Default to 'google'
+    const selectedRadio = Array.from(radios).find(radio => radio.value === choice);
+    if (selectedRadio) {
+      selectedRadio.checked = true;
+    }
+  });
+
+  // Save the choice when a radio button is selected
+  radios.forEach(radio => {
+    radio.addEventListener('change', function() {
+      chrome.storage.sync.set({ 'sourceChoice': this.value });
+    });
+  });
 });

@@ -6,9 +6,25 @@
   <script src="popup.js"></script>
 </head>
 <body>
-  <label class="switch">
-    <input type="checkbox" id="toggleButton">
-    <span class="slider"></span>
-  </label>
+  <div class="center">
+    <label class="switch">
+      <input type="checkbox" id="toggleButton">
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div class="options">
+    <div class="option">
+      <input type="radio" id="google" name="source" value="google">
+      <label for="google">Google</label>
+    </div>
+    <div class="option">
+      <input type="radio" id="gpt" name="source" value="gpt">
+      <label for="gpt">GPT</label>
+    </div>
+    <div class="option">
+      <input type="radio" id="text" name="source" value="text">
+      <label for="text">Selected Text</label>
+    </div>
+  </div>
 </body>
 </html>
