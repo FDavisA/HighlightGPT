@@ -68,17 +68,22 @@ document.addEventListener('DOMContentLoaded', function() {
   const saveGptKeyButton = document.getElementById('saveGptKey');
 
   let googleKeySaved = false;
+  let gptKeySaved = false;
   
   // Load API keys and saved flag from storage
-  chrome.storage.sync.get(['googleKey', 'googleKeySaved'], function(data) {
+  chrome.storage.sync.get(['googleKey', 'googleKeySaved', 'gptKey', 'gptKeySaved'], function(data) {
     googleKeyInput.value = data.googleKey || '';
     googleKeySaved = data.googleKeySaved || false;
-    if (googleKeySaved) {
-      googleKeyInput.type = 'password';
-    } else {
-      googleKeyInput.type = 'text';
-    }
+    gptKeyInput.value = data.gptKey || '';
+    gptKeySaved = data.gptKeySaved || false;
+  
+    // Set input types based on saved flags
+    googleKeyInput.type = googleKeySaved ? 'password' : 'text';
+    gptKeyInput.type = gptKeySaved ? 'password' : 'text';
+  
+    // Disable radio buttons based on whether keys are present
     googleRadio.disabled = !data.googleKey;
+    gptRadio.disabled = !data.gptKey;
   });
 
   // Save Google API key when the checkmark button is clicked
@@ -108,6 +113,34 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  // Save GPT API key when the checkmark button is clicked
+  saveGptKeyButton.addEventListener('click', function() {
+    const gptKey = gptKeyInput.value;
+
+    if (gptKey === '') {
+      // If the key is empty, save it and disable the radio button
+      chrome.storage.sync.set({ 'gptKey': gptKey }, function() {
+        gptRadio.disabled = true;
+      });
+    } else {
+      // Add validation here
+      verifyGptAPIKey(gptKey, function(isValid, errorMessage) {
+        if (isValid) {
+          chrome.storage.sync.set({ 'gptKey': gptKey }, function() {
+            gptRadio.disabled = false;
+            gptKeyInput.type = 'password';  // Make the key unreadable
+            showKeySavedMessage('gptKeySaved');  // Show "Key Saved!" message
+            gptKeySaved = true;  // Set the flag
+            chrome.storage.sync.set({ 'gptKeySaved': true });  // Update stored flag
+          });
+        } else {
+          // Display an error message
+          alert(`Invalid GPT API Key: ${errorMessage}`);
+        }
+      });
+    }
+  });
+
   // Clear the input field if edited after a successful save
   googleKeyInput.addEventListener('input', function() {
     if (googleKeySaved) {
@@ -120,11 +153,14 @@ document.addEventListener('DOMContentLoaded', function() {
     googleRadio.disabled = true;
   });
 
-  // Save GPT API key when the checkmark button is clicked
-  saveGptKeyButton.addEventListener('click', function() {
-    const gptKey = gptKeyInput.value;
-    chrome.storage.sync.set({ 'gptKey': gptKey }, function() {
-      gptRadio.disabled = !gptKey;
-    });
+  // Clear the GPT input field if edited after a successful save
+  gptKeyInput.addEventListener('input', function() {
+    if (gptKeySaved) {
+      this.value = '';
+      this.type = 'text';
+      gptKeySaved = false;
+      chrome.storage.sync.set({ 'gptKeySaved': false });
+    }
+    gptRadio.disabled = true;
   });
 });

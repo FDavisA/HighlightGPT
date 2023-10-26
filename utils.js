@@ -17,6 +17,10 @@ function verifyGoogleAPIKey(key, callback) {
     });
 }
 
+function verifyGptAPIKey(key, callback) {
+  callback(true)
+}
+
 function showKeySavedMessage(elementId) {
   const element = document.getElementById(elementId);
   element.classList.remove('hidden');
